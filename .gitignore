@@ -1,0 +1,28 @@
+.gradle/
+build/
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime data
+*.db
+*.log
+
+# Copied upstream test fixtures (binary files used via filesystem paths)
+src/test/resources/cbx/

@@ -1,0 +1,18 @@
+.git/
+.gradle/
+build/
+bin/
+*.class
+*.jar
+
+# Upstream build artifacts
+upstream/booklore-api/.gradle/
+upstream/booklore-api/build/
+upstream/booklore-ui/node_modules/
+upstream/booklore-ui/dist/
+upstream/booklore-ui/.angular/
+
+# IDE
+.idea/
+*.iml
+.vscode/

@@ -1,0 +1,164 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: seed-cover-image-resolution
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM app_settings WHERE name = 'cover_image_resolution'
+      changes:
+        - insert:
+            tableName: app_settings
+            columns:
+              - column: { name: name, value: cover_image_resolution }
+              - column: { name: val, value: '250x350' }
+
+  - changeSet:
+      id: seed-auto-book-search
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM app_settings WHERE name = 'auto_book_search'
+      changes:
+        - insert:
+            tableName: app_settings
+            columns:
+              - column: { name: name, value: auto_book_search }
+              - column: { name: val, value: 'false' }
+
+  - changeSet:
+      id: seed-task-cron-clear-cbx-cache
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'CLEAR_CBX_CACHE'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: CLEAR_CBX_CACHE }
+              - column: { name: cron_expression, value: '0 30 0 * * 1' }
+              - column: { name: enabled, valueBoolean: false }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+
+  - changeSet:
+      id: seed-task-cron-clear-pdf-cache
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'CLEAR_PDF_CACHE'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: CLEAR_PDF_CACHE }
+              - column: { name: cron_expression, value: '0 35 0 * * 1' }
+              - column: { name: enabled, valueBoolean: false }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+
+  - changeSet:
+      id: seed-task-cron-cleanup-deleted-books
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'CLEANUP_DELETED_BOOKS'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: CLEANUP_DELETED_BOOKS }
+              - column: { name: cron_expression, value: '0 40 0 * * 1' }
+              - column: { name: enabled, valueBoolean: true }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+
+  - changeSet:
+      id: seed-task-cron-cleanup-temp-metadata
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'CLEANUP_TEMP_METADATA'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: CLEANUP_TEMP_METADATA }
+              - column: { name: cron_expression, value: '0 45 0 * * 1' }
+              - column: { name: enabled, valueBoolean: true }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+
+  - changeSet:
+      id: seed-task-cron-sync-library-files
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'SYNC_LIBRARY_FILES'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: SYNC_LIBRARY_FILES }
+              - column: { name: cron_expression, value: '0 0 1 * * *' }
+              - column: { name: enabled, valueBoolean: true }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+
+  - changeSet:
+      id: seed-task-cron-update-book-recommendations
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'UPDATE_BOOK_RECOMMENDATIONS'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: UPDATE_BOOK_RECOMMENDATIONS }
+              - column: { name: cron_expression, value: '0 30 1 * * *' }
+              - column: { name: enabled, valueBoolean: true }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }
+
+  - changeSet:
+      id: seed-task-cron-bookdrop-periodic-scanning
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM task_cron_configuration WHERE task_type = 'BOOKDROP_PERIODIC_SCANNING'
+      changes:
+        - insert:
+            tableName: task_cron_configuration
+            columns:
+              - column: { name: task_type, value: BOOKDROP_PERIODIC_SCANNING }
+              - column: { name: cron_expression, value: '0 */10 * * * *' }
+              - column: { name: enabled, valueBoolean: false }
+              - column: { name: created_by, valueNumeric: -1 }
+              - column: { name: created_at, valueComputed: CURRENT_TIMESTAMP }
+              - column: { name: updated_at, valueComputed: CURRENT_TIMESTAMP }

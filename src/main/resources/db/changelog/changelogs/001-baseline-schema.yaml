@@ -1,0 +1,4347 @@
+databaseChangeLog:
+
+  # ============================================================
+  # TIER 1 — Tables with no foreign key dependencies
+  # ============================================================
+
+  - changeSet:
+      id: baseline-users
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: users
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password_hash
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_default_password
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: provisioning_method
+                  type: varchar(255)
+              - column:
+                  name: oidc_subject
+                  type: varchar(255)
+              - column:
+                  name: oidc_issuer
+                  type: varchar(512)
+              - column:
+                  name: avatar_url
+                  type: varchar(1024)
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-library
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: library
+      changes:
+        - createTable:
+            tableName: library
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sort
+                  type: varchar(255)
+              - column:
+                  name: watch
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: icon
+                  type: varchar(255)
+              - column:
+                  name: icon_type
+                  type: varchar(255)
+              - column:
+                  name: file_naming_pattern
+                  type: varchar(255)
+              - column:
+                  name: format_priority
+                  type: varchar(255)
+              - column:
+                  name: allowed_formats
+                  type: varchar(255)
+              - column:
+                  name: organization_mode
+                  type: varchar(255)
+                  defaultValue: AUTO_DETECT
+              - column:
+                  name: metadata_source
+                  type: varchar(255)
+                  defaultValue: EMBEDDED
+
+  - changeSet:
+      id: baseline-author
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: author
+      changes:
+        - createTable:
+            tableName: author
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: clob
+              - column:
+                  name: asin
+                  type: varchar(20)
+              - column:
+                  name: name_locked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: description_locked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: asin_locked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: photo_locked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-category
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: category
+      changes:
+        - createTable:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: baseline-mood
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: mood
+      changes:
+        - createTable:
+            tableName: mood
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: baseline-tag
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: tag
+      changes:
+        - createTable:
+            tableName: tag
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: baseline-jwt-secret
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: jwt_secret
+      changes:
+        - createTable:
+            tableName: jwt_secret
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: secret
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+
+  - changeSet:
+      id: baseline-app-settings
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: app_settings
+      changes:
+        - createTable:
+            tableName: app_settings
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: val
+                  type: clob
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-app-migration
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: app_migration
+      changes:
+        - createTable:
+            tableName: app_migration
+            columns:
+              - column:
+                  name: migration_key
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+              - column:
+                  name: executed_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+
+  - changeSet:
+      id: baseline-comic-character
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_character
+      changes:
+        - createTable:
+            tableName: comic_character
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: baseline-comic-creator
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_creator
+      changes:
+        - createTable:
+            tableName: comic_creator
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: baseline-comic-team
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_team
+      changes:
+        - createTable:
+            tableName: comic_team
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: baseline-comic-location
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_location
+      changes:
+        - createTable:
+            tableName: comic_location
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  # ============================================================
+  # TIER 2 — Tables referencing Tier 1
+  # ============================================================
+
+  - changeSet:
+      id: baseline-user-permissions
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_permissions
+      changes:
+        - createTable:
+            tableName: user_permissions
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+                    foreignKeyName: fk_user_permissions_user
+                    references: users(id)
+              - column:
+                  name: permission_admin
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permission_upload
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_download
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_edit_metadata
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_manipulate_library
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_email_book
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_delete_book
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_sync_koreader
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_access_opds
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_sync_kobo
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_manage_metadata_config
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_access_bookdrop
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_access_library_stats
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_access_user_stats
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_access_task_manager
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_manage_global_preferences
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_manage_icons
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_manage_fonts
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_demo_user
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_auto_fetch_metadata
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_custom_fetch_metadata
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_edit_metadata
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_regenerate_cover
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_move_organize_files
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_lock_unlock_metadata
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_reset_booklore_read_progress
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_reset_koreader_read_progress
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permission_bulk_reset_book_read_status
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-library-path
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: library_path
+      changes:
+        - createTable:
+            tableName: library_path
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: library_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_library_path_library
+                    references: library(id)
+              - column:
+                  name: path
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-shelf
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: shelf
+      changes:
+        - createTable:
+            tableName: shelf
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_shelf_user
+                    references: users(id)
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sort
+                  type: varchar(255)
+              - column:
+                  name: icon
+                  type: varchar(255)
+              - column:
+                  name: icon_type
+                  type: varchar(255)
+              - column:
+                  name: is_public
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-koreader-user
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: koreader_user
+      changes:
+        - createTable:
+            tableName: koreader_user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password_md5
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+              - column:
+                  name: sync_enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: sync_with_booklore_reader
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: booklore_user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_koreader_user_booklore_user
+                    references: users(id)
+
+  - changeSet:
+      id: baseline-opds-user-v2
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: opds_user_v2
+      changes:
+        - createTable:
+            tableName: opds_user_v2
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_opds_user_v2_user
+                    references: users(id)
+              - column:
+                  name: username
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password_hash
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sort_order
+                  type: varchar(20)
+                  defaultValue: RECENT
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-kobo-user-settings
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: kobo_user_settings
+      changes:
+        - createTable:
+            tableName: kobo_user_settings
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: token
+                  type: varchar(2048)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sync_enabled
+                  type: boolean
+                  defaultValueBoolean: true
+              - column:
+                  name: progress_mark_as_reading_threshold
+                  type: float
+                  defaultValueNumeric: 1
+              - column:
+                  name: progress_mark_as_finished_threshold
+                  type: float
+                  defaultValueNumeric: 99
+              - column:
+                  name: auto_add_to_shelf
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: hardcover_api_key
+                  type: varchar(2048)
+              - column:
+                  name: hardcover_sync_enabled
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: two_way_progress_sync
+                  type: boolean
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-user-settings
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_settings
+      changes:
+        - createTable:
+            tableName: user_settings
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_settings_user
+                    references: users(id)
+              - column:
+                  name: setting_key
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: setting_value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: user_settings
+            columnNames: user_id, setting_key
+            constraintName: uq_user_settings_user_key
+
+  - changeSet:
+      id: baseline-user-content-restriction
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_content_restriction
+      changes:
+        - createTable:
+            tableName: user_content_restriction
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_content_restriction_user
+                    references: users(id)
+              - column:
+                  name: restriction_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mode
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: user_content_restriction
+            columnNames: user_id, restriction_type, value
+            constraintName: uk_user_restriction
+
+  - changeSet:
+      id: baseline-refresh-token
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: refresh_token
+      changes:
+        - createTable:
+            tableName: refresh_token
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_refresh_token_user
+                    references: users(id)
+              - column:
+                  name: expiry_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: revoked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: revocation_date
+                  type: datetime
+
+  - changeSet:
+      id: baseline-oidc-session
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: oidc_session
+      changes:
+        - createTable:
+            tableName: oidc_session
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_oidc_session_user
+                    references: users(id)
+                    deleteCascade: true
+              - column:
+                  name: oidc_subject
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: oidc_issuer
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: oidc_session_id
+                  type: varchar(255)
+              - column:
+                  name: id_token_hint
+                  type: clob
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: last_refreshed_at
+                  type: datetime
+              - column:
+                  name: revoked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-oidc-group-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: oidc_group_mapping
+      changes:
+        - createTable:
+            tableName: oidc_group_mapping
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: oidc_group_claim
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: is_admin
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: permissions
+                  type: clob
+              - column:
+                  name: library_ids
+                  type: clob
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-email-provider-v2
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: email_provider_v2
+      changes:
+        - createTable:
+            tableName: email_provider_v2
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: host
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: port
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: from_address
+                  type: varchar(255)
+              - column:
+                  name: auth
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_tls
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_default
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shared
+                  type: boolean
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-custom-font
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: custom_font
+      changes:
+        - createTable:
+            tableName: custom_font
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_custom_font_user
+                    references: users(id)
+              - column:
+                  name: font_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: original_file_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: format
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uploaded_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-user-library-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_library_mapping
+      changes:
+        - createTable:
+            tableName: user_library_mapping
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_library_mapping_user
+                    references: users(id)
+              - column:
+                  name: library_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_library_mapping_library
+                    references: library(id)
+        - addPrimaryKey:
+            tableName: user_library_mapping
+            columnNames: user_id, library_id
+            constraintName: pk_user_library_mapping
+
+  - changeSet:
+      id: baseline-audit-log
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: audit_log
+      changes:
+        - createTable:
+            tableName: audit_log
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: action
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entity_type
+                  type: varchar(100)
+              - column:
+                  name: entity_id
+                  type: bigint
+              - column:
+                  name: description
+                  type: varchar(1024)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ip_address
+                  type: varchar(45)
+              - column:
+                  name: country_code
+                  type: varchar(2)
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-task-cron-configuration
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: task_cron_configuration
+      changes:
+        - createTable:
+            tableName: task_cron_configuration
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: task_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: cron_expression
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-tasks
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: tasks
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: varchar(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+              - column:
+                  name: completed_at
+                  type: datetime
+              - column:
+                  name: progress_percentage
+                  type: int
+              - column:
+                  name: message
+                  type: varchar(512)
+              - column:
+                  name: error_details
+                  type: clob
+              - column:
+                  name: task_options
+                  type: clob
+
+  # ============================================================
+  # TIER 3 — Tables referencing Tier 1 & 2
+  # ============================================================
+
+  - changeSet:
+      id: baseline-book
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book
+      changes:
+        - createTable:
+            tableName: book
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: library_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_library
+                    references: library(id)
+              - column:
+                  name: library_path_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_book_library_path
+                    references: library_path(id)
+              - column:
+                  name: metadata_match_score
+                  type: float
+              - column:
+                  name: metadata_updated_at
+                  type: datetime
+              - column:
+                  name: metadata_for_write_updated_at
+                  type: datetime
+              - column:
+                  name: is_physical
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: added_on
+                  type: datetime
+              - column:
+                  name: book_cover_hash
+                  type: varchar(20)
+              - column:
+                  name: audiobook_cover_hash
+                  type: varchar(20)
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: deleted_at
+                  type: datetime
+              - column:
+                  name: similar_books_json
+                  type: clob
+
+  - changeSet:
+      id: baseline-bookdrop-file
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: bookdrop_file
+      changes:
+        - createTable:
+            tableName: bookdrop_file
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_path
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: bigint
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                  defaultValue: PENDING_REVIEW
+              - column:
+                  name: original_metadata
+                  type: clob
+              - column:
+                  name: fetched_metadata
+                  type: clob
+              - column:
+                  name: created_at
+                  type: datetime
+              - column:
+                  name: updated_at
+                  type: datetime
+
+  - changeSet:
+      id: baseline-email-recipient-v2
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: email_recipient_v2
+      changes:
+        - createTable:
+            tableName: email_recipient_v2
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_default
+                  type: boolean
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-user-email-provider-preference
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_email_provider_preference
+      changes:
+        - createTable:
+            tableName: user_email_provider_preference
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: default_provider_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-kobo-library-snapshot
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: kobo_library_snapshot
+      changes:
+        - createTable:
+            tableName: kobo_library_snapshot
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  # ============================================================
+  # TIER 4 — Tables referencing Tier 3
+  # ============================================================
+
+  - changeSet:
+      id: baseline-book-metadata
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_metadata
+      changes:
+        - createTable:
+            tableName: book_metadata
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_book_metadata_book
+                    references: book(id)
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: subtitle
+                  type: varchar(255)
+              - column:
+                  name: publisher
+                  type: varchar(255)
+              - column:
+                  name: published_date
+                  type: date
+              - column:
+                  name: description
+                  type: clob
+              - column:
+                  name: series_name
+                  type: varchar(255)
+              - column:
+                  name: series_number
+                  type: float
+              - column:
+                  name: series_total
+                  type: int
+              - column:
+                  name: isbn_13
+                  type: varchar(13)
+              - column:
+                  name: isbn_10
+                  type: varchar(10)
+              - column:
+                  name: page_count
+                  type: int
+              - column:
+                  name: language
+                  type: varchar(10)
+              - column:
+                  name: rating
+                  type: double
+              - column:
+                  name: review_count
+                  type: int
+              - column:
+                  name: cover_updated_on
+                  type: datetime
+              - column:
+                  name: audiobook_cover_updated_on
+                  type: datetime
+              - column:
+                  name: amazon_rating
+                  type: double
+              - column:
+                  name: amazon_review_count
+                  type: int
+              - column:
+                  name: goodreads_rating
+                  type: double
+              - column:
+                  name: goodreads_review_count
+                  type: int
+              - column:
+                  name: hardcover_rating
+                  type: double
+              - column:
+                  name: hardcover_review_count
+                  type: int
+              - column:
+                  name: asin
+                  type: varchar(10)
+              - column:
+                  name: goodreads_id
+                  type: varchar(100)
+              - column:
+                  name: hardcover_id
+                  type: varchar(100)
+              - column:
+                  name: hardcover_book_id
+                  type: varchar(100)
+              - column:
+                  name: google_id
+                  type: varchar(100)
+              - column:
+                  name: comicvine_id
+                  type: varchar(100)
+              - column:
+                  name: lubimyczytac_id
+                  type: varchar(100)
+              - column:
+                  name: lubimyczytac_rating
+                  type: double
+              - column:
+                  name: ranobedb_id
+                  type: varchar(100)
+              - column:
+                  name: ranobedb_rating
+                  type: double
+              - column:
+                  name: audible_id
+                  type: varchar(100)
+              - column:
+                  name: audible_rating
+                  type: double
+              - column:
+                  name: audible_review_count
+                  type: int
+              - column:
+                  name: narrator
+                  type: varchar(500)
+              - column:
+                  name: abridged
+                  type: boolean
+              - column:
+                  name: embedding_vector
+                  type: clob
+              - column:
+                  name: embedding_updated_at
+                  type: datetime
+              - column:
+                  name: search_text
+                  type: clob
+              - column:
+                  name: age_rating
+                  type: int
+              - column:
+                  name: content_rating
+                  type: varchar(20)
+              # --- locked fields ---
+              - column:
+                  name: title_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: subtitle_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: publisher_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: published_date_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: description_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: isbn_13_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: isbn_10_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: asin_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: page_count_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: language_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: amazon_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: amazon_review_count_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: goodreads_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: goodreads_review_count_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: hardcover_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: hardcover_review_count_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: cover_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: audiobook_cover_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: series_name_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: series_number_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: series_total_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: authors_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: categories_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: moods_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: tags_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: goodreads_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: hardcover_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: hardcover_book_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: google_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: comicvine_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: lubimyczytac_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: lubimyczytac_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: ranobedb_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: ranobedb_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: audible_id_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: audible_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: audible_review_count_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: reviews_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: narrator_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: abridged_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: age_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: content_rating_locked
+                  type: boolean
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-book-file
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_file
+      changes:
+        - createTable:
+            tableName: book_file
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_file_book
+                    references: book(id)
+              - column:
+                  name: file_name
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_sub_path
+                  type: varchar(512)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_book
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_folder_based
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: book_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: archive_type
+                  type: varchar(255)
+              - column:
+                  name: file_size_kb
+                  type: bigint
+              - column:
+                  name: initial_hash
+                  type: varchar(128)
+              - column:
+                  name: current_hash
+                  type: varchar(128)
+              - column:
+                  name: description
+                  type: clob
+              - column:
+                  name: added_on
+                  type: datetime
+              - column:
+                  name: duration_seconds
+                  type: bigint
+              - column:
+                  name: bitrate
+                  type: int
+              - column:
+                  name: sample_rate
+                  type: int
+              - column:
+                  name: channels
+                  type: int
+              - column:
+                  name: codec
+                  type: varchar(50)
+              - column:
+                  name: chapter_count
+                  type: int
+              - column:
+                  name: chapters_json
+                  type: clob
+
+  # Virtual column: book_file.alt_format_current_hash (database-specific)
+  - changeSet:
+      id: baseline-book-file-virtual-column-mariadb
+      author: booklore
+      dbms: mariadb
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: book_file
+                columnName: alt_format_current_hash
+      changes:
+        - sql:
+            sql: >-
+              ALTER TABLE book_file ADD COLUMN alt_format_current_hash VARCHAR(128)
+              AS (CASE WHEN is_book = true THEN current_hash END) STORED
+
+  - changeSet:
+      id: baseline-book-file-virtual-column-postgresql
+      author: booklore
+      dbms: postgresql
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: book_file
+                columnName: alt_format_current_hash
+      changes:
+        - sql:
+            sql: >-
+              ALTER TABLE book_file ADD COLUMN alt_format_current_hash VARCHAR(128)
+              GENERATED ALWAYS AS (CASE WHEN is_book = true THEN current_hash END) STORED
+
+  - changeSet:
+      id: baseline-book-shelf-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_shelf_mapping
+      changes:
+        - createTable:
+            tableName: book_shelf_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_shelf_mapping_book
+                    references: book(id)
+              - column:
+                  name: shelf_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_shelf_mapping_shelf
+                    references: shelf(id)
+        - addPrimaryKey:
+            tableName: book_shelf_mapping
+            columnNames: book_id, shelf_id
+            constraintName: pk_book_shelf_mapping
+
+  - changeSet:
+      id: baseline-user-book-progress
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_book_progress
+      changes:
+        - createTable:
+            tableName: user_book_progress
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_book_progress_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_book_progress_book
+                    references: book(id)
+              - column:
+                  name: last_read_time
+                  type: datetime
+              - column:
+                  name: pdf_progress
+                  type: int
+              - column:
+                  name: pdf_progress_percent
+                  type: float
+              - column:
+                  name: epub_progress
+                  type: varchar(1000)
+              - column:
+                  name: epub_progress_href
+                  type: varchar(1000)
+              - column:
+                  name: epub_progress_percent
+                  type: float
+              - column:
+                  name: cbx_progress
+                  type: int
+              - column:
+                  name: cbx_progress_percent
+                  type: float
+              - column:
+                  name: koreader_progress
+                  type: varchar(1000)
+              - column:
+                  name: koreader_progress_percent
+                  type: float
+              - column:
+                  name: koreader_device
+                  type: varchar(100)
+              - column:
+                  name: koreader_device_id
+                  type: varchar(100)
+              - column:
+                  name: kobo_progress_percent
+                  type: float
+              - column:
+                  name: kobo_location
+                  type: varchar(1000)
+              - column:
+                  name: kobo_location_type
+                  type: varchar(50)
+              - column:
+                  name: kobo_location_source
+                  type: varchar(512)
+              - column:
+                  name: read_status
+                  type: varchar(255)
+              - column:
+                  name: date_finished
+                  type: datetime
+              - column:
+                  name: koreader_last_sync_time
+                  type: datetime
+              - column:
+                  name: kobo_progress_received_time
+                  type: datetime
+              - column:
+                  name: kobo_status_sent_time
+                  type: datetime
+              - column:
+                  name: kobo_progress_sent_time
+                  type: datetime
+              - column:
+                  name: read_status_modified_time
+                  type: datetime
+              - column:
+                  name: personal_rating
+                  type: int
+        - addUniqueConstraint:
+            tableName: user_book_progress
+            columnNames: user_id, book_id
+            constraintName: unique_user_book_progress
+
+  - changeSet:
+      id: baseline-user-book-file-progress
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: user_book_file_progress
+      changes:
+        - createTable:
+            tableName: user_book_file_progress
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_book_file_progress_user
+                    references: users(id)
+              - column:
+                  name: book_file_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_book_file_progress_book_file
+                    references: book_file(id)
+              - column:
+                  name: position_data
+                  type: varchar(1000)
+              - column:
+                  name: position_href
+                  type: varchar(1000)
+              - column:
+                  name: progress_percent
+                  type: float
+              - column:
+                  name: last_read_time
+                  type: datetime
+        - addUniqueConstraint:
+            tableName: user_book_file_progress
+            columnNames: user_id, book_file_id
+            constraintName: uk_user_book_file
+
+  - changeSet:
+      id: baseline-annotations
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: annotations
+      changes:
+        - createTable:
+            tableName: annotations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_annotations_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_annotations_book
+                    references: book(id)
+              - column:
+                  name: cfi
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(5000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: varchar(20)
+              - column:
+                  name: style
+                  type: varchar(50)
+              - column:
+                  name: note
+                  type: varchar(5000)
+              - column:
+                  name: chapter_title
+                  type: varchar(500)
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: annotations
+            columnNames: user_id, book_id, cfi
+            constraintName: uq_annotation_user_book_cfi
+
+  - changeSet:
+      id: baseline-pdf-annotations
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: pdf_annotations
+      changes:
+        - createTable:
+            tableName: pdf_annotations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_pdf_annotations_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_pdf_annotations_book
+                    references: book(id)
+              - column:
+                  name: data
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: pdf_annotations
+            columnNames: user_id, book_id
+            constraintName: uq_pdf_annotations_user_book
+
+  - changeSet:
+      id: baseline-book-notes
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_notes
+      changes:
+        - createTable:
+            tableName: book_notes
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_notes_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_notes_book
+                    references: book(id)
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: content
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-book-notes-v2
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_notes_v2
+      changes:
+        - createTable:
+            tableName: book_notes_v2
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_notes_v2_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_notes_v2_book
+                    references: book(id)
+              - column:
+                  name: cfi
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: selected_text
+                  type: varchar(5000)
+              - column:
+                  name: note_content
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: varchar(20)
+              - column:
+                  name: chapter_title
+                  type: varchar(500)
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: book_notes_v2
+            columnNames: user_id, book_id, cfi
+            constraintName: uq_book_notes_v2_user_book_cfi
+
+  - changeSet:
+      id: baseline-book-marks
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_marks
+      changes:
+        - createTable:
+            tableName: book_marks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_marks_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_book_marks_book
+                    references: book(id)
+              - column:
+                  name: cfi
+                  type: varchar(1000)
+              - column:
+                  name: position_ms
+                  type: bigint
+              - column:
+                  name: track_index
+                  type: int
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: color
+                  type: varchar(255)
+              - column:
+                  name: notes
+                  type: varchar(2000)
+              - column:
+                  name: priority
+                  type: int
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-magic-shelf
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: magic_shelf
+      changes:
+        - createTable:
+            tableName: magic_shelf
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: icon
+                  type: varchar(255)
+              - column:
+                  name: icon_type
+                  type: varchar(255)
+              - column:
+                  name: filter_json
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_public
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: magic_shelf
+            columnNames: user_id, name
+            constraintName: uq_magic_shelf_user_name
+
+  - changeSet:
+      id: baseline-metadata-fetch-jobs
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: metadata_fetch_jobs
+      changes:
+        - createTable:
+            tableName: metadata_fetch_jobs
+            columns:
+              - column:
+                  name: task_id
+                  type: varchar(100)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status_message
+                  type: clob
+              - column:
+                  name: started_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed_at
+                  type: datetime
+              - column:
+                  name: total_books_count
+                  type: int
+              - column:
+                  name: completed_books
+                  type: int
+
+  - changeSet:
+      id: baseline-reading-sessions
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: reading_sessions
+      changes:
+        - createTable:
+            tableName: reading_sessions
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_reading_sessions_user
+                    references: users(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_reading_sessions_book
+                    references: book(id)
+              - column:
+                  name: book_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration_seconds
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration_formatted
+                  type: varchar(255)
+              - column:
+                  name: start_progress
+                  type: float
+              - column:
+                  name: end_progress
+                  type: float
+              - column:
+                  name: progress_delta
+                  type: float
+              - column:
+                  name: start_location
+                  type: varchar(500)
+              - column:
+                  name: end_location
+                  type: varchar(500)
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-kobo-reading-state
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: kobo_reading_state
+      changes:
+        - createTable:
+            tableName: kobo_reading_state
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+              - column:
+                  name: entitlement_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: varchar(255)
+              - column:
+                  name: last_modified
+                  type: varchar(255)
+              - column:
+                  name: priority_timestamp
+                  type: varchar(255)
+              - column:
+                  name: current_bookmark_json
+                  type: clob
+              - column:
+                  name: statistics_json
+                  type: clob
+              - column:
+                  name: status_info_json
+                  type: clob
+              - column:
+                  name: last_modified_string
+                  type: varchar(255)
+        - addUniqueConstraint:
+            tableName: kobo_reading_state
+            columnNames: user_id, entitlement_id
+            constraintName: uq_kobo_reading_state_user_entitlement
+
+  - changeSet:
+      id: baseline-kobo-library-snapshot-book
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: kobo_library_snapshot_book
+      changes:
+        - createTable:
+            tableName: kobo_library_snapshot_book
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: snapshot_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_kobo_snapshot_book_snapshot
+                    references: kobo_library_snapshot(id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_hash
+                  type: varchar(255)
+              - column:
+                  name: metadata_updated_at
+                  type: datetime
+              - column:
+                  name: synced
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-kobo-removed-books-tracking
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: kobo_removed_books_tracking
+      changes:
+        - createTable:
+            tableName: kobo_removed_books_tracking
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: snapshot_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id_synced
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  # Viewer preference tables (no FK constraints, just plain user_id/book_id columns)
+
+  - changeSet:
+      id: baseline-pdf-viewer-preference
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: pdf_viewer_preference
+      changes:
+        - createTable:
+            tableName: pdf_viewer_preference
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: zoom
+                  type: varchar(255)
+              - column:
+                  name: spread
+                  type: varchar(255)
+        - addUniqueConstraint:
+            tableName: pdf_viewer_preference
+            columnNames: user_id, book_id
+            constraintName: uq_pdf_viewer_pref_user_book
+
+  - changeSet:
+      id: baseline-epub-viewer-preference
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: epub_viewer_preference
+      changes:
+        - createTable:
+            tableName: epub_viewer_preference
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: theme
+                  type: varchar(255)
+              - column:
+                  name: font
+                  type: varchar(255)
+              - column:
+                  name: font_size
+                  type: int
+              - column:
+                  name: letter_spacing
+                  type: float
+              - column:
+                  name: line_height
+                  type: float
+              - column:
+                  name: flow
+                  type: varchar(255)
+              - column:
+                  name: spread
+                  type: varchar(255)
+              - column:
+                  name: custom_font_id
+                  type: bigint
+        - addUniqueConstraint:
+            tableName: epub_viewer_preference
+            columnNames: user_id, book_id
+            constraintName: uq_epub_viewer_pref_user_book
+
+  - changeSet:
+      id: baseline-ebook-viewer-preference
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: ebook_viewer_preference
+      changes:
+        - createTable:
+            tableName: ebook_viewer_preference
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: font_family
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: font_size
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gap
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hyphenate
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_dark
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: justify
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: line_height
+                  type: float
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_block_size
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_column_count
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_inline_size
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: theme
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: flow
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: ebook_viewer_preference
+            columnNames: user_id, book_id
+            constraintName: uq_ebook_viewer_pref_user_book
+
+  - changeSet:
+      id: baseline-cbx-viewer-preference
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: cbx_viewer_preference
+      changes:
+        - createTable:
+            tableName: cbx_viewer_preference
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: spread
+                  type: varchar(255)
+              - column:
+                  name: view_mode
+                  type: varchar(255)
+              - column:
+                  name: fit_mode
+                  type: varchar(255)
+              - column:
+                  name: scroll_mode
+                  type: varchar(255)
+              - column:
+                  name: background_color
+                  type: varchar(255)
+        - addUniqueConstraint:
+            tableName: cbx_viewer_preference
+            columnNames: user_id, book_id
+            constraintName: uq_cbx_viewer_pref_user_book
+
+  - changeSet:
+      id: baseline-new-pdf-viewer-preference
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: new_pdf_viewer_preference
+      changes:
+        - createTable:
+            tableName: new_pdf_viewer_preference
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: spread
+                  type: varchar(255)
+              - column:
+                  name: view_mode
+                  type: varchar(255)
+              - column:
+                  name: fit_mode
+                  type: varchar(255)
+              - column:
+                  name: scroll_mode
+                  type: varchar(255)
+              - column:
+                  name: background_color
+                  type: varchar(255)
+        - addUniqueConstraint:
+            tableName: new_pdf_viewer_preference
+            columnNames: user_id, book_id
+            constraintName: uq_new_pdf_viewer_pref_user_book
+
+  # ============================================================
+  # TIER 5 — Tables referencing Tier 4
+  # ============================================================
+
+  - changeSet:
+      id: baseline-book-metadata-author-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_metadata_author_mapping
+      changes:
+        - createTable:
+            tableName: book_metadata_author_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bma_mapping_book
+                    references: book_metadata(book_id)
+              - column:
+                  name: author_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bma_mapping_author
+                    references: author(id)
+              - column:
+                  name: sort_order
+                  type: int
+                  constraints:
+                    nullable: false
+                  defaultValueNumeric: 0
+        - addPrimaryKey:
+            tableName: book_metadata_author_mapping
+            columnNames: book_id, sort_order
+            constraintName: pk_book_metadata_author_mapping
+
+  - changeSet:
+      id: baseline-book-metadata-category-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_metadata_category_mapping
+      changes:
+        - createTable:
+            tableName: book_metadata_category_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bmc_mapping_book
+                    references: book_metadata(book_id)
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bmc_mapping_category
+                    references: category(id)
+        - addPrimaryKey:
+            tableName: book_metadata_category_mapping
+            columnNames: book_id, category_id
+            constraintName: pk_book_metadata_category_mapping
+
+  - changeSet:
+      id: baseline-book-metadata-mood-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_metadata_mood_mapping
+      changes:
+        - createTable:
+            tableName: book_metadata_mood_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bmm_mapping_book
+                    references: book_metadata(book_id)
+              - column:
+                  name: mood_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bmm_mapping_mood
+                    references: mood(id)
+        - addPrimaryKey:
+            tableName: book_metadata_mood_mapping
+            columnNames: book_id, mood_id
+            constraintName: pk_book_metadata_mood_mapping
+
+  - changeSet:
+      id: baseline-book-metadata-tag-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: book_metadata_tag_mapping
+      changes:
+        - createTable:
+            tableName: book_metadata_tag_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bmt_mapping_book
+                    references: book_metadata(book_id)
+              - column:
+                  name: tag_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_bmt_mapping_tag
+                    references: tag(id)
+        - addPrimaryKey:
+            tableName: book_metadata_tag_mapping
+            columnNames: book_id, tag_id
+            constraintName: pk_book_metadata_tag_mapping
+
+  - changeSet:
+      id: baseline-comic-metadata
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_metadata
+      changes:
+        - createTable:
+            tableName: comic_metadata
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_comic_metadata_book
+                    references: book_metadata(book_id)
+              - column:
+                  name: issue_number
+                  type: varchar(255)
+              - column:
+                  name: volume_name
+                  type: varchar(255)
+              - column:
+                  name: volume_number
+                  type: int
+              - column:
+                  name: story_arc
+                  type: varchar(255)
+              - column:
+                  name: story_arc_number
+                  type: int
+              - column:
+                  name: alternate_series
+                  type: varchar(255)
+              - column:
+                  name: alternate_issue
+                  type: varchar(255)
+              - column:
+                  name: imprint
+                  type: varchar(255)
+              - column:
+                  name: format
+                  type: varchar(50)
+              - column:
+                  name: black_and_white
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: manga
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: reading_direction
+                  type: varchar(10)
+                  defaultValue: ltr
+              - column:
+                  name: web_link
+                  type: varchar(255)
+              - column:
+                  name: notes
+                  type: clob
+              # --- locked fields ---
+              - column:
+                  name: issue_number_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: volume_name_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: volume_number_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: story_arc_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: story_arc_number_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: alternate_series_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: alternate_issue_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: imprint_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: format_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: black_and_white_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: manga_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: reading_direction_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: web_link_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: notes_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: creators_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: pencillers_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: inkers_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: colorists_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: letterers_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: cover_artists_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: editors_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: characters_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: teams_locked
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: locations_locked
+                  type: boolean
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: baseline-public-book-review
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: public_book_review
+      changes:
+        - createTable:
+            tableName: public_book_review
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: metadata_provider
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_public_book_review_book
+                    references: book_metadata(book_id)
+              - column:
+                  name: reviewer_name
+                  type: varchar(512)
+              - column:
+                  name: title
+                  type: varchar(512)
+              - column:
+                  name: rating
+                  type: float
+              - column:
+                  name: date
+                  type: datetime
+              - column:
+                  name: body
+                  type: clob
+              - column:
+                  name: country
+                  type: varchar(512)
+              - column:
+                  name: spoiler
+                  type: boolean
+              - column:
+                  name: followers_count
+                  type: int
+              - column:
+                  name: text_reviews_count
+                  type: int
+
+  - changeSet:
+      id: baseline-metadata-fetch-proposals
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: metadata_fetch_proposals
+      changes:
+        - createTable:
+            tableName: metadata_fetch_proposals
+            columns:
+              - column:
+                  name: proposal_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_metadata_fetch_proposals_task
+                    references: metadata_fetch_jobs(task_id)
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fetched_at
+                  type: datetime
+              - column:
+                  name: reviewed_at
+                  type: datetime
+              - column:
+                  name: reviewer_user_id
+                  type: bigint
+              - column:
+                  name: status
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: metadata_json
+                  type: clob
+
+  # ============================================================
+  # TIER 6 — Tables referencing Tier 5
+  # ============================================================
+
+  - changeSet:
+      id: baseline-comic-metadata-creator-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_metadata_creator_mapping
+      changes:
+        - createTable:
+            tableName: comic_metadata_creator_mapping
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_creator_mapping_book
+                    references: comic_metadata(book_id)
+              - column:
+                  name: creator_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_creator_mapping_creator
+                    references: comic_creator(id)
+              - column:
+                  name: role
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: baseline-comic-metadata-character-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_metadata_character_mapping
+      changes:
+        - createTable:
+            tableName: comic_metadata_character_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_character_mapping_book
+                    references: comic_metadata(book_id)
+              - column:
+                  name: character_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_character_mapping_character
+                    references: comic_character(id)
+        - addPrimaryKey:
+            tableName: comic_metadata_character_mapping
+            columnNames: book_id, character_id
+            constraintName: pk_comic_metadata_character_mapping
+
+  - changeSet:
+      id: baseline-comic-metadata-team-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_metadata_team_mapping
+      changes:
+        - createTable:
+            tableName: comic_metadata_team_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_team_mapping_book
+                    references: comic_metadata(book_id)
+              - column:
+                  name: team_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_team_mapping_team
+                    references: comic_team(id)
+        - addPrimaryKey:
+            tableName: comic_metadata_team_mapping
+            columnNames: book_id, team_id
+            constraintName: pk_comic_metadata_team_mapping
+
+  - changeSet:
+      id: baseline-comic-metadata-location-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: comic_metadata_location_mapping
+      changes:
+        - createTable:
+            tableName: comic_metadata_location_mapping
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_location_mapping_book
+                    references: comic_metadata(book_id)
+              - column:
+                  name: location_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_comic_location_mapping_location
+                    references: comic_location(id)
+        - addPrimaryKey:
+            tableName: comic_metadata_location_mapping
+            columnNames: book_id, location_id
+            constraintName: pk_comic_metadata_location_mapping
+
+  # ============================================================
+  # INDEXES
+  # ============================================================
+
+  - changeSet:
+      id: baseline-indexes-book
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_library_id
+      changes:
+        - createIndex:
+            tableName: book
+            indexName: idx_library_id
+            columns:
+              - column:
+                  name: library_id
+        - createIndex:
+            tableName: book
+            indexName: idx_book_deleted
+            columns:
+              - column:
+                  name: deleted
+        - createIndex:
+            tableName: book
+            indexName: idx_book_deleted_at
+            columns:
+              - column:
+                  name: deleted_at
+        - createIndex:
+            tableName: book
+            indexName: idx_book_is_physical
+            columns:
+              - column:
+                  name: is_physical
+
+  - changeSet:
+      id: baseline-indexes-user-permissions
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_user_permissions_user
+      changes:
+        - createIndex:
+            tableName: user_permissions
+            indexName: idx_user_permissions_user
+            columns:
+              - column:
+                  name: user_id
+
+  - changeSet:
+      id: baseline-indexes-user-book-progress
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_user_book_progress_user
+      changes:
+        - createIndex:
+            tableName: user_book_progress
+            indexName: idx_user_book_progress_user
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: user_book_progress
+            indexName: idx_user_book_progress_book
+            columns:
+              - column:
+                  name: book_id
+
+  - changeSet:
+      id: baseline-indexes-book-metadata-author-mapping
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_book_metadata_id
+      changes:
+        - createIndex:
+            tableName: book_metadata_author_mapping
+            indexName: idx_book_metadata_id
+            columns:
+              - column:
+                  name: book_id
+        - createIndex:
+            tableName: book_metadata_author_mapping
+            indexName: idx_author_id
+            columns:
+              - column:
+                  name: author_id
+        - createIndex:
+            tableName: book_metadata_author_mapping
+            indexName: idx_author_mapping_author_id
+            columns:
+              - column:
+                  name: book_id
+              - column:
+                  name: author_id
+
+  - changeSet:
+      id: baseline-indexes-metadata-fetch-proposals
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_metadata_proposal_task_id
+      changes:
+        - createIndex:
+            tableName: metadata_fetch_proposals
+            indexName: idx_metadata_proposal_task_id
+            columns:
+              - column:
+                  name: task_id
+        - createIndex:
+            tableName: metadata_fetch_proposals
+            indexName: idx_metadata_proposal_book_id
+            columns:
+              - column:
+                  name: book_id
+        - createIndex:
+            tableName: metadata_fetch_proposals
+            indexName: idx_metadata_proposal_status
+            columns:
+              - column:
+                  name: status
+
+  - changeSet:
+      id: baseline-indexes-book-notes
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_book_notes_user_id
+      changes:
+        - createIndex:
+            tableName: book_notes
+            indexName: idx_book_notes_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: book_notes
+            indexName: idx_book_notes_book_id
+            columns:
+              - column:
+                  name: book_id
+
+  - changeSet:
+      id: baseline-indexes-email
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_email_provider_v2_user_id
+      changes:
+        - createIndex:
+            tableName: email_provider_v2
+            indexName: idx_email_provider_v2_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: email_recipient_v2
+            indexName: idx_email_recipient_v2_user_id
+            columns:
+              - column:
+                  name: user_id
+
+  - changeSet:
+      id: baseline-indexes-book-marks
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_book_marks_user_id
+      changes:
+        - createIndex:
+            tableName: book_marks
+            indexName: idx_book_marks_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: book_marks
+            indexName: idx_book_marks_book_id
+            columns:
+              - column:
+                  name: book_id
+
+  - changeSet:
+      id: baseline-indexes-reading-sessions
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_reading_session_user_time
+      changes:
+        - createIndex:
+            tableName: reading_sessions
+            indexName: idx_reading_session_user_time
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: start_time
+                  descending: true
+        - createIndex:
+            tableName: reading_sessions
+            indexName: idx_reading_session_book
+            columns:
+              - column:
+                  name: book_id
+              - column:
+                  name: start_time
+                  descending: true
+        - createIndex:
+            tableName: reading_sessions
+            indexName: idx_reading_session_user_book
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
+              - column:
+                  name: start_time
+                  descending: true
+
+  - changeSet:
+      id: baseline-indexes-annotations
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_annotations_user_id
+      changes:
+        - createIndex:
+            tableName: annotations
+            indexName: idx_annotations_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: annotations
+            indexName: idx_annotations_book_id
+            columns:
+              - column:
+                  name: book_id
+        - createIndex:
+            tableName: annotations
+            indexName: idx_annotations_user_book
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
+        - createIndex:
+            tableName: annotations
+            indexName: idx_annotations_user_created
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: created_at
+
+  - changeSet:
+      id: baseline-indexes-book-notes-v2
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_book_notes_v2_user_id
+      changes:
+        - createIndex:
+            tableName: book_notes_v2
+            indexName: idx_book_notes_v2_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: book_notes_v2
+            indexName: idx_book_notes_v2_book_id
+            columns:
+              - column:
+                  name: book_id
+        - createIndex:
+            tableName: book_notes_v2
+            indexName: idx_book_notes_v2_user_book
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
+        - createIndex:
+            tableName: book_notes_v2
+            indexName: idx_book_notes_v2_user_created
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: created_at
+
+  - changeSet:
+      id: baseline-indexes-user-book-file-progress
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_ubfp_user_book_file
+      changes:
+        - createIndex:
+            tableName: user_book_file_progress
+            indexName: idx_ubfp_user_book_file
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_file_id
+
+  - changeSet:
+      id: baseline-indexes-kobo-reading-state
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_kobo_reading_state_entitlement_id
+      changes:
+        - createIndex:
+            tableName: kobo_reading_state
+            indexName: idx_kobo_reading_state_entitlement_id
+            columns:
+              - column:
+                  name: entitlement_id
+
+  - changeSet:
+      id: baseline-indexes-user-content-restriction
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_ucr_user_id
+      changes:
+        - createIndex:
+            tableName: user_content_restriction
+            indexName: idx_ucr_user_id
+            columns:
+              - column:
+                  name: user_id
+
+  - changeSet:
+      id: baseline-indexes-comic-metadata
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_comic_metadata_story_arc
+      changes:
+        - createIndex:
+            tableName: comic_metadata
+            indexName: idx_comic_metadata_story_arc
+            columns:
+              - column:
+                  name: story_arc
+        - createIndex:
+            tableName: comic_metadata
+            indexName: idx_comic_metadata_volume_name
+            columns:
+              - column:
+                  name: volume_name
+        - createIndex:
+            tableName: comic_metadata_creator_mapping
+            indexName: idx_comic_creator_mapping_role
+            columns:
+              - column:
+                  name: role
+        - createIndex:
+            tableName: comic_metadata_creator_mapping
+            indexName: idx_comic_creator_mapping_book
+            columns:
+              - column:
+                  name: book_id
+
+  - changeSet:
+      id: baseline-indexes-pdf-annotations
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_pdf_annotations_user_id
+      changes:
+        - createIndex:
+            tableName: pdf_annotations
+            indexName: idx_pdf_annotations_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: pdf_annotations
+            indexName: idx_pdf_annotations_book_id
+            columns:
+              - column:
+                  name: book_id
+
+  - changeSet:
+      id: baseline-indexes-book-marks-created
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_book_marks_user_created
+      changes:
+        - createIndex:
+            tableName: book_marks
+            indexName: idx_book_marks_user_created
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: created_at
+
+  - changeSet:
+      id: baseline-indexes-audit-log
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_audit_log_created_at
+      changes:
+        - createIndex:
+            tableName: audit_log
+            indexName: idx_audit_log_created_at
+            columns:
+              - column:
+                  name: created_at
+        - createIndex:
+            tableName: audit_log
+            indexName: idx_audit_log_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: audit_log
+            indexName: idx_audit_log_action
+            columns:
+              - column:
+                  name: action
+
+  - changeSet:
+      id: baseline-indexes-author
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_author_asin
+      changes:
+        - createIndex:
+            tableName: author
+            indexName: idx_author_asin
+            columns:
+              - column:
+                  name: asin
+
+  - changeSet:
+      id: baseline-indexes-oidc-session
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_oidc_session_user_id
+      changes:
+        - createIndex:
+            tableName: oidc_session
+            indexName: idx_oidc_session_user_id
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: oidc_session
+            indexName: idx_oidc_session_subject
+            columns:
+              - column:
+                  name: oidc_subject
+        - createIndex:
+            tableName: oidc_session
+            indexName: idx_oidc_session_sid
+            columns:
+              - column:
+                  name: oidc_session_id
+        - createIndex:
+            tableName: oidc_session
+            indexName: idx_oidc_session_sub_iss_revoked
+            columns:
+              - column:
+                  name: oidc_subject
+              - column:
+                  name: oidc_issuer
+              - column:
+                  name: revoked
+
+  - changeSet:
+      id: baseline-indexes-users-oidc
+      author: booklore
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - indexExists:
+                indexName: idx_users_oidc_issuer_subject
+      changes:
+        - createIndex:
+            tableName: users
+            indexName: idx_users_oidc_issuer_subject
+            unique: true
+            columns:
+              - column:
+                  name: oidc_issuer
+              - column:
+                  name: oidc_subject
