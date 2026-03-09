@@ -940,10 +940,15 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: user_settings
-            columnNames: user_id, setting_key
-            constraintName: uq_user_settings_user_key
+            indexName: uq_user_settings_user_key
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: setting_key
 
   - changeSet:
       id: baseline-user-content-restriction
@@ -991,10 +996,17 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: user_content_restriction
-            columnNames: user_id, restriction_type, value
-            constraintName: uk_user_restriction
+            indexName: uk_user_restriction
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: restriction_type
+              - column:
+                  name: value
 
   - changeSet:
       id: baseline-refresh-token
@@ -1297,6 +1309,8 @@ databaseChangeLog:
                   name: user_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_user_library_mapping
                     nullable: false
                     foreignKeyName: fk_user_library_mapping_user
                     references: users(id)
@@ -1304,13 +1318,11 @@ databaseChangeLog:
                   name: library_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_user_library_mapping
                     nullable: false
                     foreignKeyName: fk_user_library_mapping_library
                     references: library(id)
-        - addPrimaryKey:
-            tableName: user_library_mapping
-            columnNames: user_id, library_id
-            constraintName: pk_user_library_mapping
 
   - changeSet:
       id: baseline-audit-log
@@ -1469,7 +1481,7 @@ databaseChangeLog:
                   name: message
                   type: varchar(512)
               - column:
-                  name: error_details
+                  name: errordetails
                   type: clob
               - column:
                   name: task_options
@@ -2157,6 +2169,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_shelf_mapping
                     nullable: false
                     foreignKeyName: fk_book_shelf_mapping_book
                     references: book(id)
@@ -2164,13 +2178,11 @@ databaseChangeLog:
                   name: shelf_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_shelf_mapping
                     nullable: false
                     foreignKeyName: fk_book_shelf_mapping_shelf
                     references: shelf(id)
-        - addPrimaryKey:
-            tableName: book_shelf_mapping
-            columnNames: book_id, shelf_id
-            constraintName: pk_book_shelf_mapping
 
   - changeSet:
       id: baseline-user-book-progress
@@ -2277,10 +2289,15 @@ databaseChangeLog:
               - column:
                   name: personal_rating
                   type: int
-        - addUniqueConstraint:
+        - createIndex:
             tableName: user_book_progress
-            columnNames: user_id, book_id
-            constraintName: unique_user_book_progress
+            indexName: unique_user_book_progress
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   - changeSet:
       id: baseline-user-book-file-progress
@@ -2327,10 +2344,15 @@ databaseChangeLog:
               - column:
                   name: last_read_time
                   type: datetime
-        - addUniqueConstraint:
+        - createIndex:
             tableName: user_book_file_progress
-            columnNames: user_id, book_file_id
-            constraintName: uk_user_book_file
+            indexName: uk_user_book_file
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_file_id
 
   - changeSet:
       id: baseline-annotations
@@ -2402,10 +2424,17 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: annotations
-            columnNames: user_id, book_id, cfi
-            constraintName: uq_annotation_user_book_cfi
+            indexName: uq_annotation_user_book_cfi
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
+              - column:
+                  name: cfi
 
   - changeSet:
       id: baseline-pdf-annotations
@@ -2460,10 +2489,15 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: pdf_annotations
-            columnNames: user_id, book_id
-            constraintName: uq_pdf_annotations_user_book
+            indexName: uq_pdf_annotations_user_book
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   - changeSet:
       id: baseline-book-notes
@@ -2584,10 +2618,17 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: book_notes_v2
-            columnNames: user_id, book_id, cfi
-            constraintName: uq_book_notes_v2_user_book_cfi
+            indexName: uq_book_notes_v2_user_book_cfi
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
+              - column:
+                  name: cfi
 
   - changeSet:
       id: baseline-book-marks
@@ -2715,10 +2756,15 @@ databaseChangeLog:
                   type: datetime
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: magic_shelf
-            columnNames: user_id, name
-            constraintName: uq_magic_shelf_user_name
+            indexName: uq_magic_shelf_user_name
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: name
 
   - changeSet:
       id: baseline-metadata-fetch-jobs
@@ -2889,10 +2935,15 @@ databaseChangeLog:
               - column:
                   name: last_modified_string
                   type: varchar(255)
-        - addUniqueConstraint:
+        - createIndex:
             tableName: kobo_reading_state
-            columnNames: user_id, entitlement_id
-            constraintName: uq_kobo_reading_state_user_entitlement
+            indexName: uq_kobo_reading_state_user_entitlement
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: entitlement_id
 
   - changeSet:
       id: baseline-kobo-library-snapshot-book
@@ -3010,10 +3061,15 @@ databaseChangeLog:
               - column:
                   name: spread
                   type: varchar(255)
-        - addUniqueConstraint:
+        - createIndex:
             tableName: pdf_viewer_preference
-            columnNames: user_id, book_id
-            constraintName: uq_pdf_viewer_pref_user_book
+            indexName: uq_pdf_viewer_pref_user_book
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   - changeSet:
       id: baseline-epub-viewer-preference
@@ -3068,10 +3124,15 @@ databaseChangeLog:
               - column:
                   name: custom_font_id
                   type: bigint
-        - addUniqueConstraint:
+        - createIndex:
             tableName: epub_viewer_preference
-            columnNames: user_id, book_id
-            constraintName: uq_epub_viewer_pref_user_book
+            indexName: uq_epub_viewer_pref_user_book
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   - changeSet:
       id: baseline-ebook-viewer-preference
@@ -3162,10 +3223,15 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
-        - addUniqueConstraint:
+        - createIndex:
             tableName: ebook_viewer_preference
-            columnNames: user_id, book_id
-            constraintName: uq_ebook_viewer_pref_user_book
+            indexName: uq_ebook_viewer_pref_user_book
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   - changeSet:
       id: baseline-cbx-viewer-preference
@@ -3211,10 +3277,15 @@ databaseChangeLog:
               - column:
                   name: background_color
                   type: varchar(255)
-        - addUniqueConstraint:
+        - createIndex:
             tableName: cbx_viewer_preference
-            columnNames: user_id, book_id
-            constraintName: uq_cbx_viewer_pref_user_book
+            indexName: uq_cbx_viewer_pref_user_book
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   - changeSet:
       id: baseline-new-pdf-viewer-preference
@@ -3260,10 +3331,15 @@ databaseChangeLog:
               - column:
                   name: background_color
                   type: varchar(255)
-        - addUniqueConstraint:
+        - createIndex:
             tableName: new_pdf_viewer_preference
-            columnNames: user_id, book_id
-            constraintName: uq_new_pdf_viewer_pref_user_book
+            indexName: uq_new_pdf_viewer_pref_user_book
+            unique: true
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: book_id
 
   # ============================================================
   # TIER 5 — Tables referencing Tier 4
@@ -3285,6 +3361,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_author_mapping
                     nullable: false
                     foreignKeyName: fk_bma_mapping_book
                     references: book_metadata(book_id)
@@ -3299,12 +3377,10 @@ databaseChangeLog:
                   name: sort_order
                   type: int
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_author_mapping
                     nullable: false
                   defaultValueNumeric: 0
-        - addPrimaryKey:
-            tableName: book_metadata_author_mapping
-            columnNames: book_id, sort_order
-            constraintName: pk_book_metadata_author_mapping
 
   - changeSet:
       id: baseline-book-metadata-category-mapping
@@ -3322,6 +3398,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_category_mapping
                     nullable: false
                     foreignKeyName: fk_bmc_mapping_book
                     references: book_metadata(book_id)
@@ -3329,13 +3407,11 @@ databaseChangeLog:
                   name: category_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_category_mapping
                     nullable: false
                     foreignKeyName: fk_bmc_mapping_category
                     references: category(id)
-        - addPrimaryKey:
-            tableName: book_metadata_category_mapping
-            columnNames: book_id, category_id
-            constraintName: pk_book_metadata_category_mapping
 
   - changeSet:
       id: baseline-book-metadata-mood-mapping
@@ -3353,6 +3429,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_mood_mapping
                     nullable: false
                     foreignKeyName: fk_bmm_mapping_book
                     references: book_metadata(book_id)
@@ -3360,13 +3438,11 @@ databaseChangeLog:
                   name: mood_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_mood_mapping
                     nullable: false
                     foreignKeyName: fk_bmm_mapping_mood
                     references: mood(id)
-        - addPrimaryKey:
-            tableName: book_metadata_mood_mapping
-            columnNames: book_id, mood_id
-            constraintName: pk_book_metadata_mood_mapping
 
   - changeSet:
       id: baseline-book-metadata-tag-mapping
@@ -3384,6 +3460,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_tag_mapping
                     nullable: false
                     foreignKeyName: fk_bmt_mapping_book
                     references: book_metadata(book_id)
@@ -3391,13 +3469,11 @@ databaseChangeLog:
                   name: tag_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_book_metadata_tag_mapping
                     nullable: false
                     foreignKeyName: fk_bmt_mapping_tag
                     references: tag(id)
-        - addPrimaryKey:
-            tableName: book_metadata_tag_mapping
-            columnNames: book_id, tag_id
-            constraintName: pk_book_metadata_tag_mapping
 
   - changeSet:
       id: baseline-comic-metadata
@@ -3729,6 +3805,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_comic_metadata_character_mapping
                     nullable: false
                     foreignKeyName: fk_comic_character_mapping_book
                     references: comic_metadata(book_id)
@@ -3736,13 +3814,11 @@ databaseChangeLog:
                   name: character_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_comic_metadata_character_mapping
                     nullable: false
                     foreignKeyName: fk_comic_character_mapping_character
                     references: comic_character(id)
-        - addPrimaryKey:
-            tableName: comic_metadata_character_mapping
-            columnNames: book_id, character_id
-            constraintName: pk_comic_metadata_character_mapping
 
   - changeSet:
       id: baseline-comic-metadata-team-mapping
@@ -3760,6 +3836,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_comic_metadata_team_mapping
                     nullable: false
                     foreignKeyName: fk_comic_team_mapping_book
                     references: comic_metadata(book_id)
@@ -3767,13 +3845,11 @@ databaseChangeLog:
                   name: team_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_comic_metadata_team_mapping
                     nullable: false
                     foreignKeyName: fk_comic_team_mapping_team
                     references: comic_team(id)
-        - addPrimaryKey:
-            tableName: comic_metadata_team_mapping
-            columnNames: book_id, team_id
-            constraintName: pk_comic_metadata_team_mapping
 
   - changeSet:
       id: baseline-comic-metadata-location-mapping
@@ -3791,6 +3867,8 @@ databaseChangeLog:
                   name: book_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_comic_metadata_location_mapping
                     nullable: false
                     foreignKeyName: fk_comic_location_mapping_book
                     references: comic_metadata(book_id)
@@ -3798,13 +3876,11 @@ databaseChangeLog:
                   name: location_id
                   type: bigint
                   constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_comic_metadata_location_mapping
                     nullable: false
                     foreignKeyName: fk_comic_location_mapping_location
                     references: comic_location(id)
-        - addPrimaryKey:
-            tableName: comic_metadata_location_mapping
-            columnNames: book_id, location_id
-            constraintName: pk_comic_metadata_location_mapping
 
   # ============================================================
   # INDEXES
