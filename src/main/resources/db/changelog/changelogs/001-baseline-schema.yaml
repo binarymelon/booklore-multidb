@@ -3,12 +3,12 @@ databaseChangeLog:
   # SQLite requires INTEGER (not BIGINT) for AUTOINCREMENT primary keys.
   # Use ${id.type} for all auto-increment PK columns.
   - property:
-      name: id.type
-      value: bigint
-  - property:
+      dbms: sqlite
       name: id.type
       value: integer
-      dbms: sqlite
+  - property:
+      name: id.type
+      value: bigint
 
   # ============================================================
   # TIER 1 — Tables with no foreign key dependencies
@@ -2162,6 +2162,22 @@ databaseChangeLog:
             sql: >-
               ALTER TABLE book_file ADD COLUMN alt_format_current_hash VARCHAR(128)
               GENERATED ALWAYS AS (CASE WHEN is_book = true THEN current_hash END) STORED
+
+  - changeSet:
+      id: baseline-book-file-virtual-column-sqlite
+      author: booklore
+      dbms: sqlite
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - columnExists:
+                tableName: book_file
+                columnName: alt_format_current_hash
+      changes:
+        - sql:
+            sql: >-
+              ALTER TABLE book_file ADD COLUMN alt_format_current_hash VARCHAR(128)
+              GENERATED ALWAYS AS (CASE WHEN is_book = true THEN current_hash END) VIRTUAL
 
   - changeSet:
       id: baseline-book-shelf-mapping
