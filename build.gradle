@@ -5,6 +5,7 @@ plugins {
     id 'org.hibernate.orm' version '7.2.6.Final'
     id 'com.github.ben-manes.versions' version '0.53.0'
     id 'jacoco'
+    id 'org.liquibase.gradle' version '2.2.2'
 }
 
 group = 'org.booklore'
@@ -172,6 +173,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.2.3'
 
+    // --- Liquibase CLI runtime (for liquibaseUpdate task) ---
+    liquibaseRuntime 'org.liquibase:liquibase-core'
+    liquibaseRuntime 'org.yaml:snakeyaml'
+    liquibaseRuntime 'org.xerial:sqlite-jdbc:3.49.1.0'
+    liquibaseRuntime 'org.mariadb.jdbc:mariadb-java-client:3.5.7'
+    liquibaseRuntime 'org.postgresql:postgresql'
+
     // --- Test Dependencies ---
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-test-autoconfigure'
@@ -217,4 +225,16 @@ bootRun {
 
 bootJar {
     mainClass = 'org.booklore.BookloreApplication'
+}
+
+liquibase {
+    activities {
+        main {
+            changelogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
+            url System.getenv('DATABASE_URL') ?: 'jdbc:sqlite:/tmp/booklore.db'
+            username System.getenv('DATABASE_USERNAME') ?: ''
+            password System.getenv('DATABASE_PASSWORD') ?: ''
+        }
+    }
+    runList = 'main'
 }
