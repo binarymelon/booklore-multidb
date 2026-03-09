@@ -1,5 +1,15 @@
 databaseChangeLog:
 
+  # SQLite requires INTEGER (not BIGINT) for AUTOINCREMENT primary keys.
+  # Use ${id.type} for all auto-increment PK columns.
+  - property:
+      name: id.type
+      value: bigint
+  - property:
+      name: id.type
+      value: integer
+      dbms: sqlite
+
   # ============================================================
   # TIER 1 — Tables with no foreign key dependencies
   # ============================================================
@@ -18,7 +28,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -81,7 +91,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -136,7 +146,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -189,7 +199,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -215,7 +225,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -241,7 +251,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -267,7 +277,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -295,7 +305,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -354,7 +364,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -380,7 +390,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -406,7 +416,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -432,7 +442,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -462,7 +472,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -657,7 +667,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -689,7 +699,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -736,7 +746,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -798,7 +808,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -850,7 +860,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -908,7 +918,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -964,7 +974,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1022,7 +1032,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1068,7 +1078,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1124,7 +1134,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1175,7 +1185,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1249,7 +1259,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1338,7 +1348,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1393,7 +1403,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1505,7 +1515,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1570,7 +1580,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1621,7 +1631,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -1662,7 +1672,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2042,7 +2052,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2198,7 +2208,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2313,7 +2323,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2368,7 +2378,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2450,7 +2460,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2513,7 +2523,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2565,7 +2575,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2644,7 +2654,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2714,7 +2724,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2824,7 +2834,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2901,7 +2911,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -2959,7 +2969,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3003,7 +3013,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3040,7 +3050,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3085,7 +3095,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3148,7 +3158,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3247,7 +3257,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3301,7 +3311,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3652,7 +3662,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3711,7 +3721,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: proposal_id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -3764,7 +3774,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: bigint
+                  type: ${id.type}
                   autoIncrement: true
                   constraints:
                     primaryKey: true
