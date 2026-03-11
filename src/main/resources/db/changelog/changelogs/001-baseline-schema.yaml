@@ -72,7 +72,7 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: provisioning_method
-                  type: varchar(255)
+                  type: varchar(50)
               - column:
                   name: oidc_subject
                   type: varchar(255)
@@ -121,13 +121,13 @@ databaseChangeLog:
                   defaultValueBoolean: false
               - column:
                   name: icon
-                  type: varchar(255)
+                  type: varchar(64)
               - column:
                   name: icon_type
                   type: varchar(255)
               - column:
                   name: file_naming_pattern
-                  type: varchar(255)
+                  type: varchar(1000)
               - column:
                   name: format_priority
                   type: varchar(255)
@@ -136,11 +136,11 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: organization_mode
-                  type: varchar(255)
+                  type: varchar(50)
                   defaultValue: AUTO_DETECT
               - column:
                   name: metadata_source
-                  type: varchar(255)
+                  type: varchar(20)
                   defaultValue: EMBEDDED
 
   - changeSet:
@@ -732,7 +732,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: icon
-                  type: varchar(255)
+                  type: varchar(64)
               - column:
                   name: icon_type
                   type: varchar(255)
@@ -1300,7 +1300,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: format
-                  type: varchar(255)
+                  type: varchar(10)
                   constraints:
                     nullable: false
               - column:
@@ -1421,13 +1421,13 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: task_type
-                  type: varchar(255)
+                  type: varchar(100)
                   constraints:
                     nullable: false
                     unique: true
               - column:
                   name: cron_expression
-                  type: varchar(255)
+                  type: varchar(100)
                   constraints:
                     nullable: false
               - column:
@@ -1471,12 +1471,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: type
-                  type: varchar(255)
+                  type: varchar(50)
                   constraints:
                     nullable: false
               - column:
                   name: status
-                  type: varchar(255)
+                  type: varchar(50)
                   constraints:
                     nullable: false
               - column:
@@ -1714,7 +1714,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: varchar(255)
+                  type: varchar(36)
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -1755,13 +1755,13 @@ databaseChangeLog:
                     references: book(id)
               - column:
                   name: title
-                  type: varchar(255)
+                  type: varchar(1000)
               - column:
                   name: subtitle
-                  type: varchar(255)
+                  type: varchar(1000)
               - column:
                   name: publisher
-                  type: varchar(255)
+                  type: varchar(1000)
               - column:
                   name: published_date
                   type: date
@@ -1770,7 +1770,7 @@ databaseChangeLog:
                   type: clob
               - column:
                   name: series_name
-                  type: varchar(255)
+                  type: varchar(1000)
               - column:
                   name: series_number
                   type: float
@@ -1779,16 +1779,16 @@ databaseChangeLog:
                   type: int
               - column:
                   name: isbn_13
-                  type: varchar(13)
+                  type: varchar(64)
               - column:
                   name: isbn_10
-                  type: varchar(10)
+                  type: varchar(64)
               - column:
                   name: page_count
                   type: int
               - column:
                   name: language
-                  type: varchar(10)
+                  type: varchar(255)
               - column:
                   name: rating
                   type: double
@@ -1821,7 +1821,7 @@ databaseChangeLog:
                   type: int
               - column:
                   name: asin
-                  type: varchar(10)
+                  type: varchar(20)
               - column:
                   name: goodreads_id
                   type: varchar(100)
@@ -2098,7 +2098,7 @@ databaseChangeLog:
                   defaultValueBoolean: false
               - column:
                   name: book_type
-                  type: varchar(255)
+                  type: varchar(32)
                   constraints:
                     nullable: false
               - column:
@@ -2304,7 +2304,7 @@ databaseChangeLog:
                   type: varchar(512)
               - column:
                   name: read_status
-                  type: varchar(255)
+                  type: varchar(20)
               - column:
                   name: date_finished
                   type: ${datetime.type}
@@ -2714,7 +2714,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: color
-                  type: varchar(255)
+                  type: varchar(7)
               - column:
                   name: notes
                   type: varchar(2000)
@@ -2768,7 +2768,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: icon
-                  type: varchar(255)
+                  type: varchar(64)
               - column:
                   name: icon_type
                   type: varchar(255)
@@ -2882,7 +2882,7 @@ databaseChangeLog:
                     references: book(id)
               - column:
                   name: book_type
-                  type: varchar(255)
+                  type: varchar(10)
                   constraints:
                     nullable: false
               - column:
@@ -2902,7 +2902,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: duration_formatted
-                  type: varchar(255)
+                  type: varchar(50)
               - column:
                   name: start_progress
                   type: float
@@ -3003,7 +3003,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: snapshot_id
-                  type: varchar(255)
+                  type: varchar(36)
                   constraints:
                     nullable: false
                     foreignKeyName: fk_kobo_snapshot_book_snapshot
@@ -3047,7 +3047,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: snapshot_id
-                  type: varchar(255)
+                  type: varchar(36)
                   constraints:
                     nullable: false
               - column:
@@ -3094,10 +3094,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: zoom
-                  type: varchar(255)
+                  type: varchar(64)
               - column:
                   name: spread
-                  type: varchar(255)
+                  type: varchar(64)
         - createIndex:
             tableName: pdf_viewer_preference
             indexName: uq_pdf_viewer_pref_user_book
@@ -3154,10 +3154,10 @@ databaseChangeLog:
                   type: float
               - column:
                   name: flow
-                  type: varchar(255)
+                  type: varchar(32)
               - column:
                   name: spread
-                  type: varchar(255)
+                  type: varchar(20)
               - column:
                   name: custom_font_id
                   type: bigint
@@ -3202,7 +3202,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: font_family
-                  type: varchar(255)
+                  type: varchar(128)
                   constraints:
                     nullable: false
               - column:
@@ -3252,12 +3252,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: theme
-                  type: varchar(255)
+                  type: varchar(64)
                   constraints:
                     nullable: false
               - column:
                   name: flow
-                  type: varchar(255)
+                  type: varchar(32)
                   constraints:
                     nullable: false
         - createIndex:
@@ -3301,19 +3301,19 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: spread
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: view_mode
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: fit_mode
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: scroll_mode
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: background_color
-                  type: varchar(255)
+                  type: varchar(16)
         - createIndex:
             tableName: cbx_viewer_preference
             indexName: uq_cbx_viewer_pref_user_book
@@ -3355,19 +3355,19 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: spread
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: view_mode
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: fit_mode
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: scroll_mode
-                  type: varchar(255)
+                  type: varchar(16)
               - column:
                   name: background_color
-                  type: varchar(255)
+                  type: varchar(16)
         - createIndex:
             tableName: new_pdf_viewer_preference
             indexName: uq_new_pdf_viewer_pref_user_book
@@ -3534,7 +3534,7 @@ databaseChangeLog:
                     references: book_metadata(book_id)
               - column:
                   name: issue_number
-                  type: varchar(255)
+                  type: varchar(50)
               - column:
                   name: volume_name
                   type: varchar(255)
@@ -3552,7 +3552,7 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   name: alternate_issue
-                  type: varchar(255)
+                  type: varchar(50)
               - column:
                   name: imprint
                   type: varchar(255)
@@ -3573,7 +3573,7 @@ databaseChangeLog:
                   defaultValue: ltr
               - column:
                   name: web_link
-                  type: varchar(255)
+                  type: varchar(1000)
               - column:
                   name: notes
                   type: clob
@@ -3723,7 +3723,7 @@ databaseChangeLog:
                   type: clob
               - column:
                   name: country
-                  type: varchar(512)
+                  type: varchar(255)
               - column:
                   name: spoiler
                   type: boolean
