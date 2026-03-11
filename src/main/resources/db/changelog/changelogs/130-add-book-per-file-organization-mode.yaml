@@ -10,7 +10,7 @@ databaseChangeLog:
             columnName: organization_mode
       changes:
         - addDefaultValue:
-            columnDataType: varchar(255)
+            columnDataType: varchar(50)
             columnName: organization_mode
             defaultValue: BOOK_PER_FILE
             tableName: library
