@@ -26,3 +26,4 @@ Thumbs.db
 
 # Copied upstream test fixtures (binary files used via filesystem paths)
 src/test/resources/cbx/
+.claude/settings.local.json
