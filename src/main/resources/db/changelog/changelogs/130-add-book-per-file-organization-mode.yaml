@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-book-per-file-organization-mode
+      author: https://github.com/booklore-app/booklore/pull/3203
+      dbms: "!sqlite"
+      preConditions:
+        - onFail: HALT
+        - columnExists:
+            tableName: library
+            columnName: organization_mode
+      changes:
+        - addDefaultValue:
+            columnDataType: varchar(50)
+            columnName: organization_mode
+            defaultValue: BOOK_PER_FILE
+            tableName: library

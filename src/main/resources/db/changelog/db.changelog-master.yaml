@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changelogs/001-baseline-schema.yaml
   - include:
       file: db/changelog/changelogs/002-baseline-seed-data.yaml
+  - include:
+      file: db/changelog/changelogs/130-add-book-per-file-organization-mode.yaml
